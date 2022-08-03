@@ -1,10 +1,10 @@
  #!/bin/bash
 
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-ORANGE='\033[0;33m'
-BLUE='\033[0;34m'
-NC='\033[0m' # No Color
+RED='\e[31mred'
+GREEN='\e[31mgreen'
+ORANGE='\e[31morange'
+BLUE='\e[31mblue'
+NC='\e[31mdefault' # No Color
 user="$USER"
 sciptDir=$(pwd)
 
@@ -72,6 +72,7 @@ deactivate
 echo "${BLUE}[INFO]${NC} Generating flask daemon file from template"
 sleep 1
 cd $sciptDir
+sudo mkdir generated_files
 export VAR1=$applicationName VAR2=$user
 envsubst '${VAR1} ${VAR2}' < templates/config_templates/service.txt > generated_files/$applicationName.service
 sudo cp generated_files/$applicationName.service /etc/systemd/system/$applicationName.service
