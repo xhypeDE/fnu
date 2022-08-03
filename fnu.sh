@@ -55,7 +55,7 @@ do
   echo -e "${RED}ERROR:${NC} Please enter your domain without www"
   read -p "Please enter the name of the desired domain (without www): " targetDomain
 done
-sudo cp -r /templates/flask ~/$applicationName
+sudo cp -r /templates/flask/ ~/$applicationName/
 cd ~/$applicationName
 sudo apt-get install python3-venv
 python$pyVersion -m venv venv
