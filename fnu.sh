@@ -38,12 +38,12 @@ else
   fi
 fi
 echo "Opening Firewall for NGINX"
-sudo ufw allow NGINXFull
+sudo ufw allow "NGINX Full"
 read -p "Please enter desired Python version (form: x.x): " pyVersion
-while [[ ! $pyVersion =~ ^([0-9]{1})(\.)?([0-9]{1})?$ ]]
+while [[ ! $pyVersion =~ ^([3]{1})(\.)?([0-9]{1})?$ ]]
 do
-   echo -e "${RED}ERROR:${NC} Wrong version (Only x.x is allowed)"
-   read -p "Please enter desired Python version (form: x.x): " pyVersion
+   echo -e "${RED}ERROR:${NC} Wrong version (Only 3.x is allowed)"
+   read -p "Please enter desired Python version (form: 3.x): " pyVersion
 done
 sudo add-apt-repository ppa:deadsnakes/ppa
 sudo apt-get update
@@ -55,3 +55,11 @@ do
   echo -e "${RED}ERROR:${NC} Please enter your domain without www"
   read -p "Please enter the name of the desired domain (without www): " targetDomain
 done
+sudo cp -r /templates/flask ~/$applicationName
+cd ~/$applicationName
+sudo apt-get install python3-venv
+python$pyVersion -m venv venv
+source /venv/bin/activate
+pip install -r requirements.txt
+deactivate
+
