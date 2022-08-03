@@ -1,6 +1,6 @@
 server {
     listen 80;
-    server_name ${VAR3} www.${VAR3}
+    server_name ${VAR3} www.${VAR3};
 
     location / {
         include proxy_params;
