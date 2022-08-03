@@ -1,10 +1,10 @@
  #!/bin/bash
 
 RED='\e[31mred'
-GREEN='\e[31mgreen'
-ORANGE='\e[31morange'
-BLUE='\e[31mblue'
-NC='\e[31mdefault' # No Color
+GREEN='\e[32mgreen'
+YELLOW='\e[33myellow'
+BLUE='\e[34mblue'
+NC='\e[0m default' # No Color
 user="$USER"
 sciptDir=$(pwd)
 
@@ -33,7 +33,7 @@ RESULT=$?
 if [ $RESULT -eq 0 ]; then
    echo -e "${GREEN}[SUCCESS]${NC} Installed nginx"
 else
-  echo -e "${ORANGE}[WARNING]${NC} Nginx installation failed"
+  echo -e "${YELLOW}[WARNING]${NC} Nginx installation failed"
   read -p "Proceed anyways? (Proceed only if NGINX was already installed) [y/n]: " decisionNginx
   if [ $decisionNginx == no ] | [ $decisionNginx == n ]; then
    echo "Aborting FNU... Goodbye!"
