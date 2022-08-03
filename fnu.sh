@@ -60,7 +60,7 @@ do
 done
 echo -e "${BLUE}[INFO]${NC} Setting up Flask-Environment"
 sleep 2
-sudo cp -r templates/flask/ ~/$applicationName/
+cp -r templates/flask/ ~/$applicationName/
 cd ~/$applicationName
 sudo apt-get -y install python3-pip
 pip install virtualenv
