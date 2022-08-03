@@ -1,9 +1,9 @@
 server {
     listen 80;
-    server_name $targetDomain www.$targetDomain;
+    server_name ${VAR3} www.${VAR3}
 
     location / {
         include proxy_params;
-        proxy_pass http://unix:/home/$user/$applicationName/$applicationName.sock;
+        proxy_pass http://unix:/home/${VAR4}/${VAR5}/${VAR5}.sock;
     }
 }
