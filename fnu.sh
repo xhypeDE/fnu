@@ -1,10 +1,10 @@
  #!/bin/bash
 
-RED='\e[31mred'
-GREEN='\e[32mgreen'
-YELLOW='\e[33myellow'
-BLUE='\e[34mblue'
-NC='\e[0m default' # No Color
+RED='\e[31m'
+GREEN='\e[32m'
+YELLOW='\e[33m'
+BLUE='\e[34m'
+NC='\e[0m' # No Color
 user="$USER"
 sciptDir=$(pwd)
 
