@@ -25,9 +25,9 @@ echo "
 
 "
 echo "Starting Express Installation of FNU"
-echo "${BLUE}[INFO]${NC} Updating..."
+echo -e "${BLUE}[INFO]${NC} Updating..."
 sudo apt-get update && sudo apt-get upgrade
-echo "${BLUE}[INFO]${NC} Installing Nginx"
+echo -e "${BLUE}[INFO]${NC} Installing Nginx"
 sudo apt-get install nginx 
 RESULT=$?
 if [ $RESULT -eq 0 ]; then
@@ -40,7 +40,7 @@ else
    exit
   fi
 fi
-echo "${BLUE}[INFO]${NC} Opening Firewall for NGINX"
+echo -e "${BLUE}[INFO]${NC} Opening Firewall for NGINX"
 sudo ufw allow "NGINX Full"
 read -p "Please enter desired Python version (form: 3.x): " pyVersion
 while [[ ! $pyVersion =~ ^([3]{1})(\.)?([0-9]{1})?$ ]]
@@ -58,21 +58,21 @@ do
   echo -e "${RED}[ERROR]${NC} Please enter your domain without www"
   read -p "Please enter the name of the desired domain (without www): " targetDomain
 done
-echo "${BLUE}[INFO]${NC} Setting up Flask-Environment"
+echo -e "${BLUE}[INFO]${NC} Setting up Flask-Environment"
 sleep 2
 sudo cp -r templates/flask/ ~/$applicationName/
 cd ~/$applicationName
 sudo apt-get -y install python3-pip
 pip install virtualenv
-sudo virtualenv venv --python=python3.9
+virtualenv venv --python=python3.9
 source venv/bin/activate
 pip install -r requirements.txt
 pip install gunicorn
 deactivate
-echo "${BLUE}[INFO]${NC} Generating flask daemon file from template"
+echo -e "${BLUE}[INFO]${NC} Generating flask daemon file from template"
 sleep 1
 cd $sciptDir
-sudo mkdir generated_files
+mkdir generated_files
 export VAR1=$applicationName VAR2=$user
 envsubst '${VAR1} ${VAR2}' < templates/config_templates/service.txt > generated_files/$applicationName.service
 sudo cp generated_files/$applicationName.service /etc/systemd/system/$applicationName.service
