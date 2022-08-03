@@ -39,7 +39,7 @@ else
 fi
 echo "Opening Firewall for NGINX"
 sudo ufw allow "NGINX Full"
-read -p "Please enter desired Python version (form: x.x): " pyVersion
+read -p "Please enter desired Python version (form: 3.x): " pyVersion
 while [[ ! $pyVersion =~ ^([3]{1})(\.)?([0-9]{1})?$ ]]
 do
    echo -e "${RED}ERROR:${NC} Wrong version (Only 3.x is allowed)"
@@ -55,11 +55,12 @@ do
   echo -e "${RED}ERROR:${NC} Please enter your domain without www"
   read -p "Please enter the name of the desired domain (without www): " targetDomain
 done
-sudo cp -r /templates/flask/ ~/$applicationName/
+sudo cp -r templates/flask/ ~/$applicationName/
 cd ~/$applicationName
-sudo apt-get install python3-venv
-python$pyVersion -m venv venv
-source /venv/bin/activate
+sudo apt-get -y install python3-pip
+pip install virtualenv
+sudo virtualenv venv --python=python3.9
+source venv/bin/activate
 pip install -r requirements.txt
 deactivate
 
