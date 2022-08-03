@@ -63,7 +63,6 @@ sleep 2
 cp -r templates/flask/ ~/$applicationName/
 cd ~/$applicationName
 sudo apt-get -y install python3-pip
-sudo /usr/bin/easy_install virtualenv
 sudo pip install virtualenv
 virtualenv venv --python=python3.9
 source venv/bin/activate
