@@ -76,21 +76,17 @@ mkdir generated_files
 export VAR1=$applicationName VAR2=$user
 envsubst '${VAR1} ${VAR2}' < templates/config_templates/service.txt > generated_files/$applicationName.service
 sudo cp generated_files/$applicationName.service /etc/systemd/system/$applicationName.service
+sudo systemctl daemon-reload
 sudo systemctl start $applicationName
 sudo systemctl enable $applicationName
-sudo systemctl is-active --quiet $applicationName.service
+sudo systemctl is-active $applicationName.service
 if [ $RESULT -eq 0 ]; then
    echo -e "${GREEN}[SUCEESS]${NC} Service is running"
 else
   echo -e "${RED}[ERROR]${NC} Installation failed..."
   echo -e "${RED}[ERROR]${NC} Service is not running"
-  read -p "Show service status?[y/n]: " decisionService
-  if [ $Service == yes ] | [ $decisionNginx == y ]; then
-   sudo systemctl status $applicationName.service
-   exit
-  else
-    exit
-  fi
+  sudo systemctl status $applicationName.service
+  exit
 fi
 export VAR3=$targetDomain VAR4=$user VAR5=$applicationName
 envsubst '${VAR3} ${VAR4} ${VAR5}' < templates/config_templates/nginx_site_conf.txt > generated_files/$targetDomain.conf
