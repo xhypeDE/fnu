@@ -1,0 +1,10 @@
+[Unit]
+Description=Gunicorn instance to serve ${VAR1}
+After=network.target
+
+[Service]
+User=$user
+Group=www-data
+WorkingDirectory=/home/${VAR2}/${VAR1}
+Environment="PATH=/home/${VAR2}/${VAR1}/venv/bin"
+ExecStart=/home/${VAR2}/${VAR1}/venv/bin/gunicorn --workers 5 --bind unix:${VAR1}.sock -m 007 wsgi:app
