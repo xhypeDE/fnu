@@ -42,7 +42,9 @@ else
   fi
 fi
 echo -e "${BLUE}[INFO]${NC} Opening Firewall for NGINX"
+sudo ufw allow OpenSSH
 sudo ufw allow "NGINX Full"
+sudo ufw enable | echo yes
 read -p "Please enter desired Python version (form: 3.x): " pyVersion
 while [[ ! $pyVersion =~ ^([3]{1})(\.)?([0-9]{1})?$ ]]
 do
