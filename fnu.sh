@@ -7,8 +7,7 @@ BLUE='\e[34m'
 NC='\e[0m' # No Color
 user="$USER"
 sciptDir=$(pwd)
-
-fnu > installation.log 2>&1
+exec 1>logs/instalation.log 2>&1
 
 echo "
 ███████╗███╗   ██╗██╗   ██╗                                   
@@ -75,6 +74,22 @@ echo -e "${BLUE}[INFO]${NC} Generating flask daemon file from template"
 sleep 1
 cd $sciptDir
 mkdir generated_files
+if [ $RESULT -eq 0 ]; then
+   echo -e "${GREEN}[SUCEESS]${NC} Created generated_files directory"
+else
+  echo -e "${YELLOW}[WARNING]${NC} Generated_files already exists... Overwriting"
+  sudo rm -rf generated_files
+  mkdir generated_files
+  if [ $RESULT -eq 0 ]; then
+    echo -e "${GREEN}[SUCEESS]${NC} Created generated_files directory"
+  else
+    echo -e "${RED}[ERROR]${NC} Couldn't create generated_files directory. Check permissions. 
+    Is fnu running in your home directory?"
+    echo -e "${RED}[ERROR]${NC} Installation failed..."
+    exit
+  fi
+fi
+
 export VAR1=$applicationName VAR2=$user
 envsubst '${VAR1} ${VAR2}' < templates/config_templates/service.txt > generated_files/$applicationName.service
 sudo cp generated_files/$applicationName.service /etc/systemd/system/$applicationName.service
