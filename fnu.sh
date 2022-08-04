@@ -8,6 +8,8 @@ NC='\e[0m' # No Color
 user="$USER"
 sciptDir=$(pwd)
 
+fnu > installation.log 2>&1
+
 echo "
 ███████╗███╗   ██╗██╗   ██╗                                   
 ██╔════╝████╗  ██║██║   ██║                                   
