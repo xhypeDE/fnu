@@ -43,6 +43,9 @@ else
 fi
 echo -e "${BLUE}[INFO]${NC} Opening Firewall for NGINX"
 sudo ufw allow "NGINX Full"
+sudo ufw allow "OpenSSH"
+sudo ufw allow "ssh"
+sudo ufw enable
 read -p "Please enter desired Python version (form: 3.x): " pyVersion
 while [[ ! $pyVersion =~ ^([3]{1})(\.)?([0-9]{1})?$ ]]
 do
@@ -75,13 +78,13 @@ sleep 1
 cd $sciptDir
 mkdir generated_files
 if [ $RESULT -eq 0 ]; then
-   echo -e "${GREEN}[SUCEESS]${NC} Created generated_files directory"
+   echo -e "${GREEN}[SUCCESS]${NC} Created generated_files directory"
 else
   echo -e "${YELLOW}[WARNING]${NC} Generated_files already exists... Overwriting"
   sudo rm -rf generated_files
   mkdir generated_files
   if [ $RESULT -eq 0 ]; then
-    echo -e "${GREEN}[SUCEESS]${NC} Created generated_files directory"
+    echo -e "${GREEN}[SUCCESS]${NC} Created generated_files directory"
   else
     echo -e "${RED}[ERROR]${NC} Couldn't create generated_files directory. Check permissions. 
     Is fnu running in your home directory?"
@@ -98,7 +101,7 @@ sudo systemctl start $applicationName
 sudo systemctl enable $applicationName
 sudo systemctl is-active $applicationName.service
 if [ $RESULT -eq 0 ]; then
-   echo -e "${GREEN}[SUCEESS]${NC} Service is running"
+   echo -e "${GREEN}[SUCCESS]${NC} Service is running"
 else
   echo -e "${RED}[ERROR]${NC} Installation failed..."
   echo -e "${RED}[ERROR]${NC} Service is not running"
@@ -110,8 +113,22 @@ envsubst '${VAR3} ${VAR4} ${VAR5}' < templates/config_templates/nginx_site_conf.
 sudo cp generated_files/$targetDomain.conf /etc/nginx/sites-available/$targetDomain.conf
 sudo ln -s /etc/nginx/sites-available/$targetDomain.conf /etc/nginx/sites-enabled/$targetDomain.conf
 sudo systemctl restart nginx
-
-
-
+read -p "Do you want to install a SSL Certificate Certbot? [y/n]: " decisionSSL
+if [ $decisionNginx == no ] | [ $decisionNginx == n ]; then
+  echo "Okay. Exiting...Goodbye!"
+  exit
+fi
+echo -e "${BLUE}[INFO]${NC} Installing certbot"
+sudo apt install certbot python3-certbot-nginx
+echo -e "${BLUE}[INFO]${NC} Generating certificate"
+sudo certbot --nginx -d $targetDomain -d www.$targetDomain
+echo -e "${BLUE}[INFO]${NC} Setting up auto-renewal for certificate"
+crontab -l > mycron
+echo '43 6 * * * certbot renew --post-hook "systemctl reload nginx"' >> mycron
+crontab mycron
+rm mycron
+echo -e "${GREEN}[SUCCESS]${NC} Enabled SSL for $applicationName"
+echo -e "${GREEN}[SUCCESS]${NC} Done! Goodbye"
+exit
 
 
