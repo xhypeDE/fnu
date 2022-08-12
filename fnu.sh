@@ -46,11 +46,12 @@ sudo ufw allow "NGINX Full"
 sudo ufw allow "OpenSSH"
 sudo ufw allow "ssh"
 sudo ufw enable
-read -p "Please enter desired Python version (form: 3.x): " pyVersion
-while [[ ! $pyVersion =~ ^([3]{1})(\.)?([0-9]{1})?$ ]]
+read -p "Please enter desired Python version (form: 3.x or 3.xx): " pyVersion
+regExPyVersion="^(([3]{1})(\.){1}([0-9]{1,2}))?$"
+while [[ ! $pyVersion =~ $regExPyVersion ]]
 do
    echo -e "${RED}[ERROR]${NC} Wrong version (Only 3.x is allowed)"
-   read -p "Please enter desired Python version (form: 3.x): " pyVersion
+   read -p "Please enter desired Python version (form: 3.x or 3.xx): " pyVersion
 done
 sudo add-apt-repository ppa:deadsnakes/ppa
 sudo apt-get update
@@ -64,11 +65,25 @@ do
 done
 echo -e "${BLUE}[INFO]${NC} Setting up Flask-Environment"
 sleep 2
-cp -r templates/flask/ ~/$applicationName/
+read -p "Do you want to clone an existing flask repo? [y/n]: " decisionCloneGit
+if [ $decisionNginx == yes ] | [ $decisionNginx == y ]; then
+  sudo apt-get install git
+  read -p "Git URL: " gitRepoUrl
+  git clone $gitRepoUrl $applicationName
+  requirementFile=~/$applicationName/requirements.txt
+  if test -f "$requirementFile"; then
+    echo -e "${BLUE}[INFO]${NC} Found existing requirements.txt"
+  else
+    echo -e "${YELLOW}[WARNING]${NC} No requirements.txt found. Using default."
+    cp templates/flask/requirements.txt ~/$applicationName/requirements.txt 
+  fi
+else
+  cp -r templates/flask/ ~/$applicationName/  
+fi
 cd ~/$applicationName
 sudo apt-get -y install python3-pip
 sudo pip install virtualenv
-virtualenv venv --python=python3.9
+virtualenv venv --python=python$pyVersion
 source venv/bin/activate
 pip install -r requirements.txt
 pip install gunicorn
@@ -97,6 +112,7 @@ export VAR1=$applicationName VAR2=$user
 envsubst '${VAR1} ${VAR2}' < templates/config_templates/service.txt > generated_files/$applicationName.service
 sudo cp generated_files/$applicationName.service /etc/systemd/system/$applicationName.service
 sudo systemctl daemon-reload
+echo -e "${BLUE}[INFO]${NC} Starting up service"
 sudo systemctl start $applicationName
 sudo systemctl enable $applicationName
 sudo systemctl is-active $applicationName.service
