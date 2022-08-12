@@ -1,4 +1,5 @@
 # FNU
+![alt text](https://github.com/xhypeDE/fnu/blob/babe33e3ec0f3999b2f48f997a9fccfd6850ae19/fnu_thumbnail.png)
 A simple Bash-Script to deploy a Flask/Nginx server using Gunicorn on Ubuntu.
 
 To deploy simply make sure you have git installed on the ubuntu server to clone the repository.
