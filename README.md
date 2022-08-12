@@ -42,8 +42,12 @@ To deploy simply make sure you have git installed on the ubuntu server to clone 
 * Asks for domain and applicationname to use
 * Configures NGINX to use the socket
 
-## Planned functions
-
+## Added functions
 * Ask if user wants to setup SSL with certbot
-* Ask if cronjob for auto-renewal should be enabled
+* Enables auto-renewal for certbot by default
 * Ask if the created flask installation should be initialized as a git repo
+
+## Planned functions
+* <del>Ask if user wants to setup SSL with certbot</del>
+* <del>Ask if cronjob for auto-renewal should be enabled</del>
+* <del>Ask if the created flask installation should be initialized as a git repo<del>
