@@ -1,8 +1,6 @@
 # FNU
 A simple Bash-Script to deploy a Flask/Nginx server using Gunicorn on Ubuntu.
 
-This script has not been properly refined and tested as of yet and will be improved. Use at your own risk!
-
 To deploy simply make sure you have git installed on the ubuntu server to clone the repository.
 
 
@@ -31,23 +29,14 @@ To deploy simply make sure you have git installed on the ubuntu server to clone 
 
 
 ## Current functions
-
 * Fetches updates
 * Installs NGINX
 * Asks for desired python version (3.x)
 * Installs python
-* Creates a basic flask setup with venv
+* Creates a basic flask setup with venv or clones an existing flask repo
 * Installs gunicorn
 * Sets up config files and gunicorn daemon
 * Asks for domain and applicationname to use
 * Configures NGINX to use the socket
-
-## Added functions
-* Ask if user wants to setup SSL with certbot
-* Enables auto-renewal for certbot by default
-* Ask if the created flask installation should be initialized as a git repo
-
-## Planned functions
-* <del>Ask if user wants to setup SSL with certbot</del>
-* <del>Ask if cronjob for auto-renewal should be enabled</del>
-* <del>Ask if the created flask installation should be initialized as a git repo<del>
+* Enable SSL certificate generation with certbot
+* Implements a cronjob for auto-renewal of the SSL Certificate
