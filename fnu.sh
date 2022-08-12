@@ -69,6 +69,7 @@ read -p "Do you want to clone an existing flask repo? [y/n]: " decisionCloneGit
 if [ $decisionCloneGit == yes ] | [ $decisionCloneGit == y ]; then
   sudo apt-get install git
   read -p "Git URL: " gitRepoUrl
+  cd ~/
   git clone $gitRepoUrl $applicationName
   requirementFile=~/$applicationName/requirements.txt
   if test -f "$requirementFile"; then
