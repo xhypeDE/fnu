@@ -66,7 +66,7 @@ done
 echo -e "${BLUE}[INFO]${NC} Setting up Flask-Environment"
 sleep 2
 read -p "Do you want to clone an existing flask repo? [y/n]: " decisionCloneGit
-if [ $decisionNginx == yes ] | [ $decisionNginx == y ]; then
+if [ $decisionCloneGit == yes ] | [ $decisionCloneGit == y ]; then
   sudo apt-get install git
   read -p "Git URL: " gitRepoUrl
   git clone $gitRepoUrl $applicationName
@@ -130,7 +130,7 @@ sudo cp generated_files/$targetDomain.conf /etc/nginx/sites-available/$targetDom
 sudo ln -s /etc/nginx/sites-available/$targetDomain.conf /etc/nginx/sites-enabled/$targetDomain.conf
 sudo systemctl restart nginx
 read -p "Do you want to install a SSL Certificate Certbot? [y/n]: " decisionSSL
-if [ $decisionNginx == no ] | [ $decisionNginx == n ]; then
+if [ $decisionSSL == no ] | [ $decisionSSL == n ]; then
   echo "Okay. Exiting...Goodbye!"
   exit
 fi
