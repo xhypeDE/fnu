@@ -4,6 +4,6 @@ server {
 
     location / {
         include proxy_params;
-        proxy_pass http://unix:/home/${VAR4}/${VAR5}/${VAR5}.sock;
+        proxy_pass http://unix:/var/www/${VAR5}/${VAR5}.sock;
     }
 }
