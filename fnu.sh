@@ -106,5 +106,42 @@ sudo sed -i "s/\${VAR4}/$user/g" /etc/nginx/sites-available/$applicationName
 sudo sed -i "s/\${VAR5}/$applicationName/g" /etc/nginx/sites-available/$applicationName
 sudo ln -s /etc/nginx/sites-available/$applicationName /etc/nginx/sites-enabled
 sudo systemctl restart nginx
+echo -e "${GREEN}[SUCCESS]${NC} NGINX configuration completed. "
 
-echo -e "${GREEN}[SUCCESS]${NC} Installation completed. Please check http://$domain"
+
+# Step 9: Check if the user wants to install SSL Certificate using Certbot
+read -p "Do you want to install a SSL Certificate using Certbot? [y/n]: " decisionSSL
+
+# If the user decides to install SSL
+if [ "$decisionSSL" = "y" ] || [ "$decisionSSL" = "yes" ]; then
+
+  # Install Certbot and the Nginx plugin
+  echo -e "${BLUE}[INFO]${NC} Installing Certbot and its Nginx plugin..."
+  sudo apt-get install -y certbot python3-certbot-nginx
+  
+  # Generate the SSL certificate and configure it to work with Nginx
+  echo -e "${BLUE}[INFO]${NC} Generating SSL certificate..."
+  sudo certbot --nginx -d $targetDomain -d www.$targetDomain
+  
+  # If the SSL certificate was successfully generated and configured
+  if [ $? -eq 0 ]; then
+    echo -e "${GREEN}[SUCCESS]${NC} SSL certificate was generated and configured successfully."
+
+    # Setup a cron job for auto-renewal of the SSL certificate
+    echo -e "${BLUE}[INFO]${NC} Setting up auto-renewal for the SSL certificate..."
+    echo '43 6 * * * certbot renew --post-hook "systemctl reload nginx"' | sudo tee -a /etc/crontab > /dev/null
+
+    # If the cron job was successfully set up
+    if [ $? -eq 0 ]; then
+      echo -e "${GREEN}[SUCCESS]${NC} Auto-renewal for the SSL certificate has been set up successfully."
+    else
+      echo -e "${RED}[ERROR]${NC} Failed to set up auto-renewal for the SSL certificate."
+    fi
+  else
+    echo -e "${RED}[ERROR]${NC} Failed to generate and configure SSL certificate."
+  fi
+else
+  echo "Skipping SSL certificate installation..."
+fi
+
+echo -e "${GREEN}[SUCCESS]${NC} Script completed successfully!"
